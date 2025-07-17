@@ -1,14 +1,14 @@
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import MessageHandler, ContextTypes, filters, CallbackQueryHandler
 
-# Menú simulado
+# Simulated menu
 MENU = {
-    "Entradas": [("Bruschetta", "Pan con tomate y albahaca - $5"),
-                 ("Empanadas", "Rellenas de carne - $6")],
-    "Platos Principales": [("Lomo Saltado", "Con papas y arroz - $12"),
-                           ("Paella", "Con mariscos - $15")],
-    "Bebidas": [("Jugo Natural", "De naranja o piña - $3"),
-                ("Vino Tinto", "Copa de la casa - $6")]
+    "Закуски": [("Брускетта", "Хлеб с помидорами и базиликом — 5$"),
+                ("Эмпанадас", "С мясной начинкой — 6$")],
+    "Основные блюда": [("Ломо Сальтадо", "С картофелем и рисом — 12$"),
+                       ("Паэлья", "С морепродуктами — 15$")],
+    "Напитки": [("Свежевыжатый сок", "Апельсиновый или ананасовый — 3$"),
+                ("Красное вино", "Бокал домашнего — 6$")]
 }
 
 
@@ -23,7 +23,7 @@ def build_category_keyboard():
 async def show_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message:
         await update.message.reply_text(
-            "📋 Estas son las categorías del menú:",
+            "📋 Вот категории меню:",
             reply_markup=build_category_keyboard()
         )
 
@@ -35,7 +35,7 @@ async def handle_menu_selection(update: Update, context: ContextTypes.DEFAULT_TY
     category = query.data.replace("menu_", "")
     items = MENU.get(category, [])
     if not items:
-        await query.edit_message_text("❌ No se encontraron elementos.")
+        await query.edit_message_text("❌ Элементы не найдены.")
         return
 
     text = f"📂 *{category}*\n\n"
@@ -45,5 +45,5 @@ async def handle_menu_selection(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 # Handlers
-handler = MessageHandler(filters.Regex("^🍽 Ver menú$"), show_menu)
+handler = MessageHandler(filters.Regex("^🍽 Посмотреть меню$"), show_menu)
 callback_handler = CallbackQueryHandler(handle_menu_selection, pattern="^menu_")
